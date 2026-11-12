@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-test("published apps match full test preview, four dock apps and updated status bar", async ({
+test("published default matches full test preview, four dock apps and updated status bar", async ({
   page,
   request,
 }) => {
@@ -7,11 +7,11 @@ test("published apps match full test preview, four dock apps and updated status 
   const preview = await (await request.get("/test-work.json")).json();
   expect(work.id).toBe("ui-test-phone-v2");
   expect(work.apps).toEqual(preview.apps);
-  expect(work.nodes.length).toBeGreaterThan(0);
-  expect(preview.nodes).toHaveLength(0);
+  expect(work.data).toEqual(preview.data);
   expect(
     work.apps.filter((a: { installed: boolean }) => a.installed),
   ).toHaveLength(49);
+  expect(work.nodes).toHaveLength(0);
   expect(
     work.apps.filter(
       (a: { installed: boolean; dock: boolean }) => a.installed && a.dock,
@@ -20,7 +20,7 @@ test("published apps match full test preview, four dock apps and updated status 
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.setViewportSize({ width: 393, height: 852 });
-  await page.goto("/?preview=test");
+  await page.goto("/");
   await page.getByRole("button", { name: "轻触解锁" }).waitFor();
   await page
     .locator(".phone-screen")

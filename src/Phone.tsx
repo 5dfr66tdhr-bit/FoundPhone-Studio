@@ -291,7 +291,6 @@ function PhoneRuntime({
     if (app && !work.apps.some((a) => a.id === app && a.installed)) setApp("");
   }, [app, work.apps]);
   const displayTime = creator ? work.phone.time : s.time || work.phone.time;
-  const customWallpaper = safeMedia(work.phone.wallpaper);
   const plugin = getApp(app);
   useEffect(() => {
     const count = s.notifications.length;
@@ -319,15 +318,7 @@ function PhoneRuntime({
     >
       <KeyboardContext.Provider value={setKeyboard}>
         <div
-          className={`phone-screen ${customWallpaper ? "wallpaper-custom" : `wallpaper-${work.phone.wallpaper}`} ${locked ? "is-locked" : ""} ${app ? "in-app" : ""} ${keyboard ? "keyboard-open" : ""}`}
-          style={
-            customWallpaper
-              ? {
-                  backgroundImage: `url("${customWallpaper}")`,
-                  backgroundPosition: "center",
-                }
-              : undefined
-          }
+          className={`phone-screen wallpaper-${work.phone.wallpaper} ${locked ? "is-locked" : ""} ${app ? "in-app" : ""} ${keyboard ? "keyboard-open" : ""}`}
           data-app={app}
           onDragStart={(e) => e.preventDefault()}
           onPointerDown={(e) => {
@@ -393,12 +384,8 @@ function PhoneRuntime({
             }
           }}
         >
-          {!customWallpaper && (
-            <>
-              <div className="wallpaper-orb orb-one" />
-              <div className="wallpaper-orb orb-two" />
-            </>
-          )}
+          <div className="wallpaper-orb orb-one" />
+          <div className="wallpaper-orb orb-two" />
           <div className="status-bar">
             <button
               onClick={() =>
